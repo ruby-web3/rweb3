@@ -21,10 +21,11 @@ jobs:
           rustup-toolchain: ${{ matrix.rust }}
           bundler-cache: true
           cargo-cache: true
+          cargo-cache-extra-path: ./ext/rweb3
 
       - name: Run ruby tests
         run: bundle exec rake
 
       - name: Lint rust
-        working-directory: .ext/rweb3
+        working-directory: ./ext/rweb3
         run: cargo clippy && cargo fmt --check
