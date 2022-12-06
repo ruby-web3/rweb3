@@ -33,13 +33,6 @@ jobs:
         with:
           path: tmp
 
-      - run: bundle exec rake compile
-
-      - uses: actions/upload-artifact@v3
-        continue-on-error: true
-        with:
-          path: tmp
-
       - name: Annotate commit with clippy warnings
         uses: actions-rs/clippy-check@v1
         with:
@@ -48,4 +41,10 @@ jobs:
 
       - name: Run ruby tests
         run: bundle exec rake
+
+      - uses: actions/upload-artifact@v3
+        continue-on-error: true
+        with:
+          path: tmp
+
 
