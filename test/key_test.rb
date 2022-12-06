@@ -7,7 +7,8 @@ class KeyTest < Test::Unit::TestCase
 
   def test_new_key
     key = RWeb3::Key.new
-    pp key
+    signature = key.sign(RWeb3::Bytes.new("abcd".bytes), 0)
+    pp signature.r
   end
 
 end

@@ -6,7 +6,7 @@ use web3::types::Bytes as BytesImpl;
 use super::root;
 
 #[derive(Debug)]
-#[magnus::wrap(class = "Bytes", free_immediately, size)]
+#[magnus::wrap(class = "RWeb3::Bytes", free_immediately, size)]
 pub struct Bytes {
     inner: BytesImpl,
 }

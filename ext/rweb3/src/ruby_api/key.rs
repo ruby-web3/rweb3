@@ -1,8 +1,11 @@
+use std::borrow::Borrow;
 use std::cell::RefCell;
 use std::ops::Deref;
 
-use magnus::{function, method, Error, Module, Object, TryConvert, TypedData};
-use web3::signing::{Key as Web3Key, SecretKeyRef, Signature as SignatureImpl, SigningError};
+use magnus::{function, method, Attr, Error, Module, Object, TryConvert, TypedData};
+use web3::signing::{
+    hash_message, Key as Web3Key, SecretKeyRef, Signature as SignatureImpl, SigningError,
+};
 
 use crate::ruby_api::types::Bytes;
 use secp256k1::rand::rngs::OsRng;
@@ -33,7 +36,7 @@ impl Key {
         let secret_key_ref = SecretKeyRef::new(secret_key.deref());
         Ok(Signature::from_inner(
             secret_key_ref
-                .sign(message.get().0.as_slice(), chain_id)
+                .sign(hash_message(message.get().0.as_slice()).as_ref(), chain_id)
                 .unwrap(),
         ))
     }
@@ -52,13 +55,19 @@ impl Signature {
     pub fn get(&self) -> &SignatureImpl {
         &self.inner
     }
+
+    pub fn r(&self) -> Result<Bytes, Error> {
+        return Bytes::new(self.inner.borrow().r.0.to_vec());
+    }
 }
 
 pub fn init() -> Result<(), Error> {
-    let class = root().define_class("Key", Default::default())?;
+    let key_class = root().define_class("Key", Default::default())?;
+    key_class.define_singleton_method("new", function!(Key::new, 0))?;
+    key_class.define_method("sign", method!(Key::sign, 2))?;
 
-    class.define_singleton_method("new", function!(Key::new, 0))?;
-    class.define_method("sign", method!(Key::sign, 2))?;
+    let signature_class = root().define_class("Signature", Default::default())?;
+    signature_class.define_attr("r", Attr::Read)?;
 
     Ok(())
 }
