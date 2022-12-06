@@ -31,6 +31,7 @@ jobs:
       - uses: actions/download-artifact@v3
         continue-on-error: true
         with:
+          name: tmp-${{ matrix.os }}-${{ matrix.ruby }}-${{ matrix.rust }}
           path: tmp
 
       - name: Annotate commit with clippy warnings
@@ -45,6 +46,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         continue-on-error: true
         with:
+          name: tmp-${{ matrix.os }}-${{ matrix.ruby }}-${{ matrix.rust }}
           path: tmp
 
 
