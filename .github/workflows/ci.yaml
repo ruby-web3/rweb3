@@ -26,4 +26,5 @@ jobs:
         run: bundle exec rake
 
       - name: Lint rust
+        working-directory: .ext/rweb3
         run: cargo clippy && cargo fmt --check
