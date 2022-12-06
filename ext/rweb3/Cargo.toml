@@ -1,0 +1,17 @@
+[package]
+name = "rweb3"
+version = "1.0.0"
+authors = ["Peter Chung <touhonoob@gmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+lazy_static = "1.4.0"
+magnus = { version = "0.4.2", features = ["rb-sys-interop"] }
+secp256k1 = { version = "0.21", features = ["rand-std", "recovery", "serde"] }
+web3 = { version = "0.18.0", features = ["http", "http-tls", "ws-tokio", "ws-tls-tokio", "ipc-tokio", "signing", "eip-1193", "arbitrary_precision"] }
+zeroize = { version = "1.5.7", features = ["aarch64", "serde", "zeroize_derive", "derive", "std"] }
+anyhow = "*"
+marker = "0.8.0"
