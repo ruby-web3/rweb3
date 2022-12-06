@@ -28,9 +28,24 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
+      - uses: actions/download-artifact@v3
+        continue-on-error: true
+        with:
+          path: tmp
+
+      - run: bundle exec rake compile
+
+      - uses: actions/upload-artifact@v3
+        continue-on-error: true
+        with:
+          path: tmp
+
+      - name: Annotate commit with clippy warnings
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-features --manifest-path ext/rweb3/Cargo.toml
+
       - name: Run ruby tests
         run: bundle exec rake
 
-      - name: Lint rust
-        working-directory: ./ext/rweb3
-        run: cargo clippy && cargo fmt --check
