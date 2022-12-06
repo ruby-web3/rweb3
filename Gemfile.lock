@@ -1,7 +1,19 @@
+PATH
+  remote: .
+  specs:
+    rweb3 (1.0.0)
+      rb_sys (~> 0.9.46)
+
 GEM
   remote: https://rubygems.org/
   specs:
+    ffi (1.15.5)
+    get_process_mem (0.2.7)
+      ffi (~> 1.0)
     power_assert (2.0.2)
+    rake (13.0.6)
+    rake-compiler (1.2.0)
+      rake
     rb_sys (0.9.46)
     test-unit (3.5.5)
       power_assert
@@ -10,7 +22,11 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  rb_sys (~> 0.9.46)
+  get_process_mem
+  rake (~> 13.0)
+  rake-compiler
+  rb_sys
+  rweb3!
   test-unit (~> 3.5)
 
 BUNDLED WITH
