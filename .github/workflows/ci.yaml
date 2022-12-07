@@ -28,11 +28,15 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
-      - uses: actions/download-artifact@v3
-        continue-on-error: true
+      - uses: actions/cache@v3
         with:
-          name: tmp-${{ matrix.os }}-${{ matrix.ruby }}-${{ matrix.rust }}
-          path: tmp
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            tmp/
+          key: ${{ matrix.os }}-${{ matrix.rust }}-cargo-${{ hashFiles('ext/rweb3/Cargo.lock') }}
 
       - name: Annotate commit with clippy warnings
         uses: actions-rs/clippy-check@v1
@@ -42,11 +46,3 @@ jobs:
 
       - name: Run ruby tests
         run: bundle exec rake
-
-      - uses: actions/upload-artifact@v3
-        continue-on-error: true
-        with:
-          name: tmp-${{ matrix.os }}-${{ matrix.ruby }}-${{ matrix.rust }}
-          path: tmp
-
-
